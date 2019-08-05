@@ -909,6 +909,35 @@ stack_buttons = """
     on_enter: app.example_add_stack_floating_buttons()
 """
 
+refresh_layout = """
+#:import Toolbar kivymd.toolbar.Toolbar
+#:import MDScrollViewRefreshLayout kivymd.refreshlayout.MDScrollViewRefreshLayout
+
+
+<ItemForListRefreshLayout>
+    text: root.text
+
+    IconLeftSampleWidget:
+        icon: root.icon
+
+
+<RefreshLayout@Screen>
+    name: 'refresh layout'
+
+    FloatLayout:
+
+        MDScrollViewRefreshLayout:
+            id: refresh_layout
+            refresh_callback: app.refresh_callback
+            root_layout: root
+
+            GridLayout:
+                id: box
+                size_hint_y: None
+                height: self.minimum_height
+                cols: 1
+"""
+
 update_spinner = """
 #:import MDLabel kivymd.label.MDLabel
 #:import MDUpdateSpinner kivymd.updatespinner.MDUpdateSpinner
@@ -1483,7 +1512,17 @@ md_icons = """
 
 class Screens(object):
     manager_swiper = None
+    main_widget = None
+    directory = None
 
+    data = {
+        "Refresh Layout": {
+            "kv_string": refresh_layout,
+            "Factory": "Factory.RefreshLayout()",
+            "name_screen": "refresh layout",
+            "object": None,
+        },
+    }
     def show_manager_swiper(self):
         from kivymd.managerswiper import MDSwiperPagination
 
@@ -1806,3 +1845,24 @@ class Screens(object):
             self.stack_buttons = Factory.StackButtons()
             self.main_widget.ids.scr_mngr.add_widget(self.stack_buttons)
         self.main_widget.ids.scr_mngr.current = 'stack buttons'
+
+    def show_screen(self, name_screen):
+        if not self.data[name_screen]["object"]:
+            Builder.load_string(self.data[name_screen]["kv_string"])
+            self.data[name_screen]["object"] = eval(self.data[name_screen]["Factory"])
+            if name_screen == "Bottom App Bar":
+                self.set_appbar()
+                self.data[name_screen]["object"].add_widget(self.md_app_bar)
+            self.main_widget.ids.scr_mngr.add_widget(self.data[name_screen]["object"])
+            if name_screen == "Text fields":
+                self.data[name_screen]["object"].ids.text_field_error.bind(
+                    on_text_validate=self.set_error_message,
+                    on_focus=self.set_error_message,
+                )
+            elif name_screen == "MD Icons":
+                self.set_list_md_icons()
+            elif name_screen == "Tabs":
+                self.build_tabs()
+            elif name_screen == "Refresh Layout":
+                self.set_list_for_refresh_layout()
+        self.main_widget.ids.scr_mngr.current = self.data[name_screen]["name_screen"]

@@ -130,7 +130,6 @@ main_widget_kv = """
 <MyNavigationDrawerIconButton@NavigationDrawerIconButton>:
     icon: 'checkbox-blank-circle'
 
-
 <ContentNavigationDrawer@MDNavigationDrawer>:
     drawer_logo: './assets/drawer_logo.png'
 
@@ -232,7 +231,10 @@ main_widget_kv = """
     MyNavigationDrawerIconButton:
         text: "User Animation Card"
         on_release: app.show_user_animation_card()
-
+    MyNavigationDrawerIconButton:
+        text: "Refresh Layout"
+        on_release:
+            app.show_screen(self.text)
 
 NavigationLayout:
     id: nav_layout
@@ -334,6 +336,26 @@ class KitchenSink(App, Screens):
                        self.directory),
                    '{}/assets/guitar-1139397_1280_crop.png'.format(
                        self.directory))
+
+    def set_list_for_refresh_layout(self):
+        from kivymd.list import ThreeLineAvatarIconListItem, TwoLineAvatarIconListItem
+        data_list = ['A', 'B', 'c', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']
+        for name_icon in data_list:
+            self.data["Refresh Layout"]["object"].ids.box.add_widget(
+                TwoLineAvatarIconListItem(text=name_icon, secondary_text=name_icon, theme_text_color='Custom')
+            )
+        self.data["Refresh Layout"]["object"].ids.refresh_layout.refresh_done()
+
+    def refresh_callback(self, *args):
+        """A method that updates the state of your application
+        while the spinner remains on the screen."""
+
+        def refresh_callback(interval):
+            self.data["Refresh Layout"]["object"].ids.box.clear_widgets()
+            self.set_list_for_refresh_layout()
+            self.tick = 0
+
+        Clock.schedule_once(refresh_callback, 1)
 
     def crop_image_for_tile(self, instance, size, path_to_crop_image):
         if not os.path.exists(
