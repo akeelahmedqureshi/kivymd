@@ -24,7 +24,7 @@ print("check error.......................................4")
 
 Toast = autoclass('android.widget.Toast')
 print("check error.......................................5")
-context = autoclass('org.renpy.android.PythonActivity').mActivity
+context = autoclass('org.kivy.android.PythonActivity').mActivity
 print("check error.......................................6")
 
 @run_on_ui_thread
