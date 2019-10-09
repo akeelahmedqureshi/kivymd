@@ -24,7 +24,16 @@ print("check error.......................................4")
 
 Toast = autoclass('android.widget.Toast')
 print("check error.......................................5")
-context = autoclass('org.kivy.android.PythonActivity').mActivity
+# context = autoclass('org.kivy.android.PythonActivity').mActivity
+activity_classes = ('org.kivy.android.PythonActivity', 'org.renpy.android.PythonActivity')
+
+for activity_obj in activity_classes:
+    try:
+        context = autoclass(activity_obj).mActivity
+    except Exception:
+        pass
+    else:  # the class was found
+        break
 print("check error.......................................6")
 
 @run_on_ui_thread
