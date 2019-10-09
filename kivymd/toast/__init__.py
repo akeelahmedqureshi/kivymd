@@ -13,13 +13,11 @@ Copyright © 2010-2018 HeaTTheatR
 что и фреймворк Kivy.
 
 '''
-print("inside toast init method.......")
+
 from kivy import platform
 
 
-if platform == 'android': 
-    print("befor toast module import........")
+if platform == 'android':
     from . androidtoast import toast
-    print("after toast module import........")
 else:
     from . kivytoast import toast
