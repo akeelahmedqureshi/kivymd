@@ -18,7 +18,8 @@ from android import activity
 from android.runnable import run_on_ui_thread
 
 Toast = autoclass('android.widget.Toast')
-context = autoclass('org.kivy.android.PythonActivity').mActivity
+# context = autoclass('org.kivy.android.PythonActivity').mActivity
+context = autoclass('org.renpy.android.PythonActivity').mActivity
 # activity_classes = ('org.kivy.android.PythonActivity', 'org.renpy.android.PythonActivity')
 
 # for activity_obj in activity_classes:
